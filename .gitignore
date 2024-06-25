@@ -1,0 +1,29 @@
+# This .gitignore file should be placed at the root of your Unity project directory
+
+# OS generated files #
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Visual Studio
+.vs/
+*.csproj
+*.sln
+*.user
+*.userosscache
+*.sln.docstates
+
+# Unity generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Memory Captures
+*.memsnap
+*.memgraph
+
+# Asset Bundle Browser
+AssetBundlesOutput/
