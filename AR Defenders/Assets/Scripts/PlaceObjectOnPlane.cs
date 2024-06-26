@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -5,33 +6,33 @@ using UnityEngine.XR.ARSubsystems;
 
 public class PlaceObjectOnPlane : MonoBehaviour
 {
-    public GameObject objectToPlace; // Objeto que se colocará en la escena AR
+    public GameObject basePrefab; // Prefab de la base
+    private ARRaycastManager arRaycastManager;
+    private GameObject spawnedBase;
+    private bool basePlaced = false;
 
-    private ARRaycastManager arRaycastManager; // Gestiona los rayos AR
-    private List<ARRaycastHit> hits = new List<ARRaycastHit>(); // Lista de impactos de rayos AR
+    static List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
-    void Start()
+    void Awake()
     {
-        arRaycastManager = GetComponent<ARRaycastManager>(); // Obtiene el ARRaycastManager del componente actual
+        arRaycastManager = GetComponent<ARRaycastManager>();
     }
 
     void Update()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (!basePlaced && arRaycastManager.Raycast(new Vector2(Screen.width / 2, Screen.height / 2), hits, TrackableType.Planes))
         {
-            PlaceObject(); // Llama a la función PlaceObject cuando se detecta un toque en la pantalla
-        }
-    }
-
-    void PlaceObject()
-    {
-        // Lanza un rayo desde la posición del toque en la pantalla
-        if (arRaycastManager.Raycast(Input.GetTouch(0).position, hits, TrackableType.PlaneWithinPolygon))
-        {
-            // Obtiene la posición y rotación donde se colocará el objeto
             Pose hitPose = hits[0].pose;
-            // Instancia el objeto en la posición y rotación obtenidas
-            Instantiate(objectToPlace, hitPose.position, hitPose.rotation);
+            if (!basePlaced)
+            {
+                spawnedBase = Instantiate(basePrefab, hitPose.position, hitPose.rotation);
+                basePlaced = true;
+            }
+        }
+
+        if (basePlaced)
+        {
+            // Aquí puedes manejar la lógica adicional para cuando la base ya esté colocada
         }
     }
 }
